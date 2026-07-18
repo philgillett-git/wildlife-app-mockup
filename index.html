@@ -994,7 +994,10 @@
     margin-top: -4px;
     position: relative;
     z-index: 1;
+    display: none;
   }
+  .map-pin.active .map-pin-label,
+  .map-pin.you .map-pin-label { display: block; }
   .map-pin.active .map-pin-label { background: var(--amber); }
 
   .map-pin.you {
@@ -1976,14 +1979,60 @@
     document.querySelector('.species-detail').classList.remove('active');
   }
 
+  // Species detail entry — remember origin (species grid vs map)
+  let speciesOrigin = 'species';
   document.querySelectorAll('[data-jump-species]').forEach(el => el.addEventListener('click', () => {
+    const activeSub = document.querySelector('.g-sub.active');
+    speciesOrigin = activeSub ? activeSub.dataset.sub : 'species';
     document.querySelectorAll('.g-sub').forEach(s => s.classList.remove('active'));
     document.querySelector('.species-detail').classList.add('active');
   }));
   document.querySelectorAll('[data-back-species]').forEach(btn => btn.addEventListener('click', () => {
     document.querySelector('.species-detail').classList.remove('active');
-    document.querySelector('[data-sub="species"]').classList.add('active');
+    const target = document.querySelector(`[data-sub="${speciesOrigin}"]`);
+    if (target) target.classList.add('active');
   }));
+
+  // Map pin data + click behaviour
+  const pinSpecies = {
+    'top: 30%; left: 41%;': {name:'Balder', latin:'Eurasian Eagle-Owl · Bubo bubo', cat:'Owls · 3 min walk', zone:'Zone 2', thumb:'img/owl_hero.jpg'},
+    'top: 30%; left: 32%;': {name:'Willow', latin:'Barn Owl · Tyto alba', cat:'Owls · 4 min walk', zone:'Zone 2', thumb:'img/barn_owl.jpg'},
+    'top: 30%; left: 50%;': {name:'Snowy', latin:'Snowy Owl · Bubo scandiacus', cat:'Owls · 4 min walk', zone:'Zone 2', thumb:'img/owl_hero.jpg'},
+    'top: 63%; left: 25%;': {name:'Peregrine', latin:'Peregrine Falcon · Falco peregrinus', cat:'Falcons · 5 min walk', zone:'Zone 4', thumb:'img/peregrine.jpg'},
+    'top: 63%; left: 38%;': {name:'Kestrel', latin:'Common Kestrel · Falco tinnunculus', cat:'Falcons · 5 min walk', zone:'Zone 4', thumb:'img/peregrine.jpg'},
+    'top: 72%; left: 68%;': {name:'Freya', latin:'Bald Eagle · Haliaeetus leucocephalus', cat:'Eagles · 7 min walk', zone:'Zone 5', thumb:'img/eagle.jpg'},
+    'top: 78%; left: 76%;': {name:'Odin', latin:'Golden Eagle · Aquila chrysaetos', cat:'Eagles · 7 min walk', zone:'Zone 5', thumb:'img/golden_eagle.jpg'},
+    'top: 82%; left: 63%;': {name:'Boris', latin:'Griffon Vulture · Gyps fulvus', cat:'Vultures · 8 min walk', zone:'Zone 5', thumb:'img/golden_eagle.jpg'},
+  };
+
+  document.querySelectorAll('.map-pin:not(.you)').forEach(pin => {
+    const style = pin.getAttribute('style');
+    const data = pinSpecies[style];
+    if (!data) return;
+    pin.dataset.speciesName = data.name;
+    pin.dataset.speciesLatin = data.latin;
+    pin.dataset.speciesCat = data.cat;
+    pin.dataset.speciesZone = data.zone;
+    pin.dataset.speciesThumb = data.thumb;
+    if (!pin.querySelector('.map-pin-label')) {
+      const label = document.createElement('div');
+      label.className = 'map-pin-label';
+      label.textContent = data.name;
+      pin.appendChild(label);
+    }
+    pin.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.map-pin').forEach(p => { if (!p.classList.contains('you')) p.classList.remove('active'); });
+      pin.classList.add('active');
+      const preview = document.querySelector('.map-preview');
+      if (!preview) return;
+      preview.querySelector('.map-preview-thumb').style.backgroundImage = `url('${data.thumb}')`;
+      preview.querySelector('.map-preview-cat').textContent = data.cat;
+      preview.querySelector('.map-preview-name').textContent = data.name;
+      preview.querySelector('.map-preview-sub').textContent = data.latin;
+      preview.querySelector('.map-preview-distance').textContent = data.zone;
+    });
+  });
 
   const adminModal = document.getElementById('admin-modal');
   document.querySelectorAll('[data-open-modal]').forEach(el => el.addEventListener('click', () => adminModal.classList.add('active')));
