@@ -1,0 +1,2423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wildlife App · Prototype for Paul</title>
+<style>
+  :root {
+    --forest: #1F4740;
+    --forest-deep: #142E29;
+    --moss: #78A08C;
+    --moss-soft: #B8CBBE;
+    --amber: #D97706;
+    --amber-soft: #F5D9B2;
+    --ink: #0F1E1F;
+    --ink-soft: #4A5B58;
+    --ink-mute: #7C8B87;
+    --paper: #FAFAF7;
+    --bone: #EDE9DF;
+    --mist: #DFDCD1;
+    --stage: #E8E4D6;
+    --hairline: rgba(15, 30, 31, 0.08);
+    --shadow-phone: 0 32px 60px -20px rgba(20, 46, 41, 0.35), 0 12px 24px -12px rgba(20, 46, 41, 0.25);
+    --shadow-card: 0 1px 2px rgba(15, 30, 31, 0.04), 0 4px 12px -4px rgba(15, 30, 31, 0.08);
+    --serif: Georgia, "Times New Roman", "Iowan Old Style", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --forest: #78A08C;
+      --forest-deep: #B8CBBE;
+      --moss: #4E6E60;
+      --moss-soft: #2E4239;
+      --amber: #E8A055;
+      --amber-soft: #4A2F13;
+      --ink: #EDE9DF;
+      --ink-soft: #B4B0A4;
+      --ink-mute: #7C8B87;
+      --paper: #10201C;
+      --bone: #182D28;
+      --mist: #22403A;
+      --stage: #0A1815;
+      --hairline: rgba(237, 233, 223, 0.08);
+      --shadow-phone: 0 32px 60px -20px rgba(0, 0, 0, 0.6), 0 12px 24px -12px rgba(0, 0, 0, 0.4);
+      --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 12px -4px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  :root[data-theme="light"] {
+    --forest: #1F4740;
+    --forest-deep: #142E29;
+    --moss: #78A08C;
+    --moss-soft: #B8CBBE;
+    --amber: #D97706;
+    --amber-soft: #F5D9B2;
+    --ink: #0F1E1F;
+    --ink-soft: #4A5B58;
+    --ink-mute: #7C8B87;
+    --paper: #FAFAF7;
+    --bone: #EDE9DF;
+    --mist: #DFDCD1;
+    --stage: #E8E4D6;
+    --hairline: rgba(15, 30, 31, 0.08);
+    --shadow-phone: 0 32px 60px -20px rgba(20, 46, 41, 0.35), 0 12px 24px -12px rgba(20, 46, 41, 0.25);
+    --shadow-card: 0 1px 2px rgba(15, 30, 31, 0.04), 0 4px 12px -4px rgba(15, 30, 31, 0.08);
+  }
+
+  :root[data-theme="dark"] {
+    --forest: #78A08C;
+    --forest-deep: #B8CBBE;
+    --moss: #4E6E60;
+    --moss-soft: #2E4239;
+    --amber: #E8A055;
+    --amber-soft: #4A2F13;
+    --ink: #EDE9DF;
+    --ink-soft: #B4B0A4;
+    --ink-mute: #7C8B87;
+    --paper: #10201C;
+    --bone: #182D28;
+    --mist: #22403A;
+    --stage: #0A1815;
+    --hairline: rgba(237, 233, 223, 0.08);
+    --shadow-phone: 0 32px 60px -20px rgba(0, 0, 0, 0.6), 0 12px 24px -12px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 12px -4px rgba(0, 0, 0, 0.3);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--stage);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(120, 160, 140, 0.14), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(31, 71, 64, 0.10), transparent 45%);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+  }
+
+  /* ---------- Top nav ---------- */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px clamp(20px, 4vw, 48px);
+    border-bottom: 1px solid var(--hairline);
+    background: var(--paper);
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--forest);
+    letter-spacing: -0.01em;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--forest);
+    display: grid;
+    place-items: center;
+    color: var(--paper);
+  }
+
+  .brand small {
+    display: block;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-top: 2px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    background: var(--bone);
+    border-radius: 999px;
+  }
+
+  .tab {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .tab:hover { color: var(--ink); }
+
+  .tab.active {
+    background: var(--forest);
+    color: var(--paper);
+    box-shadow: 0 1px 3px rgba(15, 30, 31, 0.2);
+  }
+
+  .tab-badge {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 11px;
+    margin-left: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tab:not(.active) .tab-badge {
+    background: var(--mist);
+    color: var(--ink-soft);
+  }
+
+  .top-meta {
+    font-size: 12px;
+    color: var(--ink-mute);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(280px, 340px) auto;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: center;
+    justify-content: center;
+    padding: clamp(24px, 4vw, 56px);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  @media (max-width: 900px) {
+    .stage { grid-template-columns: 1fr; padding: 24px 16px; }
+  }
+
+  /* ---------- Notes column ---------- */
+  .notes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .notes-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+  }
+
+  .notes h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.15;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .notes p {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  .notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .notes-item {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 12px;
+    align-items: baseline;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .notes-item::before {
+    content: "";
+    height: 1px;
+    background: var(--forest);
+    align-self: center;
+    margin-top: 0;
+  }
+
+  .notes-item strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .notes-tip {
+    padding: 14px 16px;
+    background: var(--bone);
+    border-radius: 10px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    border-left: 2px solid var(--moss);
+  }
+
+  .notes-tip strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Phone frame ---------- */
+  .phone {
+    width: 360px;
+    height: 740px;
+    background: #1a1a1c;
+    border-radius: 46px;
+    padding: 12px;
+    box-shadow: var(--shadow-phone);
+    position: relative;
+    justify-self: center;
+  }
+
+  .phone::before, .phone::after {
+    content: "";
+    position: absolute;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+  }
+
+  .phone::before {
+    left: -3px; top: 130px;
+    width: 3px; height: 60px;
+  }
+
+  .phone::after {
+    right: -3px; top: 160px;
+    width: 3px; height: 90px;
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    background: var(--paper);
+    border-radius: 34px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .phone-notch {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 26px;
+    background: #1a1a1c;
+    border-radius: 999px;
+    z-index: 100;
+  }
+
+  .phone-status {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 26px 6px;
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    z-index: 10;
+  }
+
+  .phone-status-right {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .phone-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 0 20px;
+    scrollbar-width: none;
+  }
+  .phone-body::-webkit-scrollbar { display: none; }
+
+  /* ---------- View switcher ---------- */
+  .view { display: none; }
+  .view.active { display: flex; flex-direction: column; height: 100%; }
+
+  /* ============================================
+     DIRECTORY VIEW
+     ============================================ */
+  .dir-header {
+    padding: 4px 20px 12px;
+  }
+
+  .dir-header-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--forest);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .dir-header-sub {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-top: 4px;
+  }
+
+  .dir-search {
+    margin: 8px 20px 14px;
+    background: var(--bone);
+    border-radius: 12px;
+    padding: 11px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--ink-mute);
+  }
+
+  .dir-toggle {
+    display: flex;
+    gap: 4px;
+    margin: 0 20px 12px;
+    padding: 4px;
+    background: var(--bone);
+    border-radius: 10px;
+  }
+
+  .dir-toggle button {
+    flex: 1;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 7px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    font-weight: 500;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: var(--sans);
+  }
+
+  .dir-toggle button.active {
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(15, 30, 31, 0.08);
+  }
+
+  .dir-map-wrap {
+    padding: 4px 20px 16px;
+    position: relative;
+  }
+
+  .dir-map {
+    background: linear-gradient(180deg, #E5E9DF 0%, #DDE1D6 100%);
+    border-radius: 16px;
+    padding: 12px;
+    aspect-ratio: 4/5;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dir-map svg { width: 100%; height: 100%; display: block; }
+
+  .dir-pin {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--forest);
+    border: 3px solid var(--paper);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease;
+  }
+
+  .dir-pin:hover { transform: translate(-50%, -50%) scale(1.15); }
+
+  .dir-pin.highlight {
+    background: var(--amber);
+    width: 26px;
+    height: 26px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 2px 6px rgba(0,0,0,0.25), 0 0 0 0 rgba(217, 119, 6, 0.4); }
+    50% { box-shadow: 0 2px 6px rgba(0,0,0,0.25), 0 0 0 8px rgba(217, 119, 6, 0); }
+  }
+
+  .dir-pin-label {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--forest);
+    color: var(--paper);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    letter-spacing: 0.02em;
+  }
+
+  .dir-pin-label::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--forest);
+  }
+
+  .dir-list {
+    padding: 0 20px 20px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dir-list.active { display: flex; }
+  .dir-map-wrap.hidden { display: none; }
+
+  .dir-card {
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.12s ease;
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .dir-card:hover {
+    border-color: var(--moss);
+    transform: translateY(-1px);
+  }
+
+  .dir-card.featured {
+    background: var(--forest);
+    color: var(--paper);
+    border-color: var(--forest);
+  }
+
+  .dir-card.featured .dir-card-loc,
+  .dir-card.featured .dir-card-meta { color: rgba(250, 250, 247, 0.7); }
+
+  .dir-card-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--bone);
+    display: grid;
+    place-items: center;
+    color: var(--forest);
+  }
+
+  .dir-card.featured .dir-card-icon {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--paper);
+  }
+
+  .dir-card-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  .dir-card-loc {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-top: 2px;
+  }
+
+  .dir-card-meta {
+    font-size: 11px;
+    color: var(--ink-mute);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* ============================================
+     VISITOR VIEW — Gauntlet
+     ============================================ */
+
+  .visitor {
+    display: flex; flex-direction: column; height: 100%;
+  }
+
+  /* --- Home screen --- */
+  .g-home {
+    display: flex; flex-direction: column; height: 100%;
+  }
+  .g-home.hidden { display: none; }
+
+  .g-hero {
+    position: relative;
+    height: 190px;
+    background: linear-gradient(160deg, #1F4740 0%, #142E29 100%);
+    color: var(--paper);
+    padding: 16px 20px 20px;
+    overflow: hidden;
+  }
+
+  .g-hero-illus {
+    position: absolute;
+    right: -30px;
+    bottom: -20px;
+    width: 220px;
+    height: 220px;
+    opacity: 0.35;
+  }
+
+  .g-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moss-soft);
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+
+  .g-hero-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--amber);
+    animation: pulse-dot 1.8s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .g-hero-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    line-height: 1.1;
+    margin-top: 12px;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .g-hero-title em {
+    font-style: italic;
+    color: var(--moss-soft);
+  }
+
+  .g-hero-sub {
+    font-size: 12.5px;
+    margin-top: 8px;
+    opacity: 0.75;
+    position: relative;
+    z-index: 1;
+  }
+
+  .g-live-strip {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--amber-soft);
+    color: #6b3d0a;
+    font-size: 12.5px;
+    cursor: pointer;
+  }
+
+  .g-live-strip strong { font-weight: 600; }
+
+  .g-live-strip .now {
+    background: var(--amber);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .g-live-strip svg { margin-left: auto; }
+
+  .g-features {
+    padding: 16px 20px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .g-feature {
+    background: var(--bone);
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: transform 0.12s ease, background 0.12s ease;
+    text-align: left;
+    border: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 110px;
+  }
+
+  .g-feature:hover {
+    transform: translateY(-2px);
+    background: var(--moss-soft);
+  }
+
+  .g-feature-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--paper);
+    display: grid; place-items: center;
+    color: var(--forest);
+  }
+
+  .g-feature-title {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--ink);
+    margin-top: auto;
+    letter-spacing: -0.005em;
+  }
+
+  .g-feature-sub {
+    font-size: 11px;
+    color: var(--ink-mute);
+  }
+
+  .g-footer {
+    padding: 8px 20px 16px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--ink-mute);
+  }
+
+  /* --- Sub-screens --- */
+  .g-sub {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .g-sub.active { display: flex; }
+
+  .g-sub-header {
+    padding: 4px 20px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .g-back {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    color: var(--ink);
+  }
+
+  .g-back:hover { background: var(--bone); }
+
+  .g-sub-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--forest);
+    letter-spacing: -0.01em;
+  }
+
+  .g-sub-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 20px 20px;
+  }
+
+  /* --- Site Map screen --- */
+  .sitemap-frame {
+    background: linear-gradient(160deg, #EFECE0 0%, #E3E0D2 100%);
+    border-radius: 14px;
+    padding: 14px;
+    position: relative;
+    aspect-ratio: 5/6;
+    overflow: hidden;
+  }
+
+  .sitemap-frame svg { width: 100%; height: 100%; display: block; }
+
+  .sm-station {
+    position: absolute;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: var(--paper);
+    display: grid; place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    border: 2px solid var(--paper);
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .sm-station.active {
+    background: var(--amber);
+    animation: pulse 2s infinite;
+  }
+
+  .sm-legend {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sm-legend-item {
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+
+  .sm-legend-badge {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: var(--paper);
+    display: grid; place-items: center;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .sm-legend-item small {
+    color: var(--ink-mute);
+    font-size: 11px;
+  }
+
+  /* --- Schedule --- */
+  .schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sched-date {
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 4px;
+  }
+
+  .sched-item {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bone);
+    border-radius: 12px;
+    align-items: center;
+    position: relative;
+  }
+
+  .sched-item.now {
+    background: var(--forest);
+    color: var(--paper);
+  }
+
+  .sched-item.past { opacity: 0.5; }
+
+  .sched-time {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .sched-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  .sched-loc {
+    font-size: 11.5px;
+    color: var(--ink-mute);
+    margin-top: 2px;
+  }
+
+  .sched-item.now .sched-loc { color: rgba(250, 250, 247, 0.7); }
+
+  .sched-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: var(--amber);
+    color: var(--paper);
+  }
+
+  .sched-mins {
+    font-size: 11px;
+    color: rgba(250, 250, 247, 0.7);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Species --- */
+  .species-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .species-card {
+    background: var(--bone);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: left;
+    border: 0;
+    padding: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.12s ease;
+  }
+
+  .species-card:hover { transform: translateY(-2px); }
+
+  .species-thumb {
+    aspect-ratio: 4/3;
+    background: linear-gradient(160deg, #78A08C 0%, #1F4740 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .species-thumb svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--paper);
+    opacity: 0.9;
+  }
+
+  .species-meta {
+    padding: 10px 12px 12px;
+  }
+
+  .species-name {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+
+  .species-latin {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-top: 2px;
+  }
+
+  /* Species detail */
+  .species-detail {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+  }
+  .species-detail.active { display: flex; }
+
+  .sd-hero {
+    background: linear-gradient(160deg, #78A08C 0%, #1F4740 100%);
+    height: 200px;
+    position: relative;
+    color: var(--paper);
+    overflow: hidden;
+  }
+
+  .sd-hero svg.owl {
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    width: 220px;
+    height: 220px;
+    opacity: 0.6;
+  }
+
+  .sd-back {
+    position: absolute;
+    top: 14px; left: 14px;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.28);
+    border: 0;
+    color: var(--paper);
+    display: grid; place-items: center;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .sd-title {
+    position: absolute;
+    left: 20px;
+    bottom: 16px;
+    z-index: 1;
+  }
+
+  .sd-title-eyebrow {
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+
+  .sd-title h3 {
+    font-family: var(--serif);
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    font-weight: 400;
+  }
+
+  .sd-title small {
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 4px;
+  }
+
+  .sd-body {
+    padding: 16px 20px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .sd-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .sd-stat {
+    background: var(--bone);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+
+  .sd-stat-label {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+
+  .sd-stat-value {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--forest);
+    margin-top: 4px;
+  }
+
+  .sd-section-label {
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    margin: 12px 0 8px;
+  }
+
+  .sd-body p {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .sd-audio {
+    margin-top: 14px;
+    background: var(--forest);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .sd-audio-icon {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--amber);
+    display: grid; place-items: center;
+  }
+
+  .sd-audio-text {
+    flex: 1;
+  }
+
+  .sd-audio-title {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .sd-audio-sub {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  /* --- Conservation --- */
+  .conservation-hero {
+    background: linear-gradient(160deg, #78A08C 0%, #1F4740 100%);
+    color: var(--paper);
+    padding: 16px 20px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .conservation-hero h4 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    max-width: 240px;
+    text-wrap: balance;
+  }
+
+  .conservation-hero p {
+    font-size: 12.5px;
+    line-height: 1.5;
+    opacity: 0.85;
+    margin-top: 8px;
+    max-width: 240px;
+  }
+
+  .cons-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .cons-stat {
+    background: var(--bone);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+
+  .cons-stat-value {
+    font-family: var(--serif);
+    font-size: 24px;
+    color: var(--forest);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .cons-stat-label {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .cons-project {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .cons-project:first-of-type { border-top: 0; }
+
+  .cons-project-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--moss-soft);
+    color: var(--forest);
+    display: grid;
+    place-items: center;
+  }
+
+  .cons-project-name {
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+
+  .cons-project-desc {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-top: 3px;
+    line-height: 1.45;
+  }
+
+  .cons-donate {
+    margin-top: 14px;
+    background: var(--amber);
+    color: var(--paper);
+    padding: 14px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .cons-donate strong {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .cons-donate small {
+    display: block;
+    font-size: 11px;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  /* ============================================
+     ADMIN VIEW
+     ============================================ */
+
+  .admin-header {
+    padding: 6px 20px 12px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .admin-eyebrow {
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+  }
+
+  .admin-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--forest);
+    margin-top: 2px;
+    letter-spacing: -0.015em;
+  }
+
+  .admin-sub {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-top: 2px;
+  }
+
+  .admin-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 14px 20px;
+  }
+
+  .admin-metric {
+    background: var(--bone);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+
+  .admin-metric-label {
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+
+  .admin-metric-value {
+    font-family: var(--serif);
+    font-size: 24px;
+    color: var(--forest);
+    margin-top: 4px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .admin-metric-value small {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--moss);
+    font-weight: 600;
+  }
+
+  .admin-section-label {
+    padding: 4px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .admin-section-label span {
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+
+  .admin-section-label a {
+    font-size: 11.5px;
+    color: var(--forest);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .admin-sched-list {
+    padding: 6px 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .admin-sched-item {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bone);
+    border-radius: 10px;
+    align-items: center;
+    font-size: 12.5px;
+  }
+
+  .admin-sched-time {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .admin-sched-name {
+    font-size: 12.5px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .admin-sched-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--moss);
+    font-weight: 600;
+  }
+
+  .admin-sched-status.warn { color: var(--amber); }
+
+  .admin-status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+  }
+
+  .admin-actions {
+    padding: 6px 20px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .admin-action {
+    appearance: none;
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 12px 12px;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--sans);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.12s ease, transform 0.12s ease;
+  }
+
+  .admin-action:hover {
+    border-color: var(--moss);
+    transform: translateY(-1px);
+  }
+
+  .admin-action-icon {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--forest);
+    color: var(--paper);
+    display: grid; place-items: center;
+  }
+
+  .admin-action-name {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+
+  .admin-action-sub {
+    font-size: 10.5px;
+    color: var(--ink-mute);
+  }
+
+  /* Admin edit-schedule modal */
+  .admin-modal {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 30, 31, 0.5);
+    z-index: 20;
+    border-radius: 34px;
+    padding: 40px 16px 16px;
+    align-items: flex-end;
+  }
+
+  .admin-modal.active { display: flex; }
+
+  .admin-modal-card {
+    background: var(--paper);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    width: 100%;
+  }
+
+  .admin-modal-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--forest);
+    letter-spacing: -0.01em;
+  }
+
+  .admin-modal-sub {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-top: 4px;
+    margin-bottom: 14px;
+  }
+
+  .admin-field {
+    margin-bottom: 12px;
+  }
+
+  .admin-field-label {
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .admin-field-value {
+    background: var(--bone);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .admin-modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .admin-btn {
+    appearance: none;
+    border: 0;
+    padding: 12px;
+    border-radius: 10px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .admin-btn-primary {
+    background: var(--forest);
+    color: var(--paper);
+  }
+
+  .admin-btn-ghost {
+    background: var(--bone);
+    color: var(--ink);
+  }
+
+  /* ============================================
+     UTIL
+     ============================================ */
+
+  .icon { width: 16px; height: 16px; flex-shrink: 0; }
+  .icon-lg { width: 20px; height: 20px; }
+  .icon-sm { width: 14px; height: 14px; }
+
+  /* Theme toggle */
+  .theme-toggle {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--hairline);
+    color: var(--ink-soft);
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: var(--sans);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .theme-toggle:hover { border-color: var(--moss); color: var(--ink); }
+
+  .top-right { display: flex; align-items: center; gap: 16px; }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top-nav">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 2 C7 6, 5 11, 5 15 C5 19, 8 22, 12 22 C16 22, 19 19, 19 15 C19 11, 17 6, 12 2 Z" />
+          <circle cx="12" cy="14" r="1.5" fill="currentColor" />
+        </svg>
+      </div>
+      <div>
+        Wildlife App
+        <small>Prototype · v0.1</small>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="directory">Directory</button>
+      <button class="tab" data-tab="visitor">Visitor <span class="tab-badge">Gauntlet</span></button>
+      <button class="tab" data-tab="admin">Admin <span class="tab-badge">Gauntlet</span></button>
+    </div>
+
+    <div class="top-right">
+      <div class="top-meta">For Paul · 18 Jul</div>
+      <button class="theme-toggle" id="theme-btn">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        Theme
+      </button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <!-- ============ NOTES COLUMN ============ -->
+    <aside class="notes" id="notes">
+
+      <!-- Directory notes -->
+      <div data-notes="directory">
+        <div class="notes-eyebrow">01 · Directory</div>
+        <h2>One app. Every independent wildlife site.</h2>
+        <p>Visitors arrive here first. Search or browse the map, tap a centre, and drop into their in-app experience — no separate download.</p>
+        <div class="notes-list">
+          <div class="notes-item"><span></span><span><strong>Model A</strong> — every centre shares one shell. Cheap for them, discoverable for visitors.</span></div>
+          <div class="notes-item"><span></span><span><strong>Model B</strong> — a centre wants their own branded app? Same content, different wrapper.</span></div>
+          <div class="notes-item"><span></span><span>Try tapping the amber pin — that's Gauntlet.</span></div>
+        </div>
+        <div class="notes-tip">
+          <strong>For Paul.</strong> PWA-first, so the "shared shell" and "own-branded shell" are the same codebase with a theme/config swap. Content per-centre lives in the same backend.
+        </div>
+      </div>
+
+      <!-- Visitor notes -->
+      <div data-notes="visitor" style="display:none;">
+        <div class="notes-eyebrow">02 · Visitor · at Gauntlet</div>
+        <h2>What a visitor sees on arrival.</h2>
+        <p>Four features from the deck — nothing more. This is the whole visitor product surface.</p>
+        <div class="notes-list">
+          <div class="notes-item"><span></span><span><strong>Site map</strong> — where the aviaries and displays are. Tap a station for detail.</span></div>
+          <div class="notes-item"><span></span><span><strong>Live schedule</strong> — today's flying displays, with a live "now" marker.</span></div>
+          <div class="notes-item"><span></span><span><strong>Species profiles</strong> — scan a QR at the aviary or browse. Try the Eurasian Eagle-Owl.</span></div>
+          <div class="notes-item"><span></span><span><strong>Conservation</strong> — the story behind the centre and where donations go.</span></div>
+        </div>
+        <div class="notes-tip">
+          <strong>Tap any tile</strong> to open its screen. Everything's real content from Gauntlet Birds of Prey.
+        </div>
+      </div>
+
+      <!-- Admin notes -->
+      <div data-notes="admin" style="display:none;">
+        <div class="notes-eyebrow">03 · Admin · Gauntlet's side</div>
+        <h2>How Emma at Gauntlet runs it.</h2>
+        <p>Once a centre is onboarded, day-to-day operation is a five-minute check-in. This is the operator's view — the same content the visitor sees, but writable.</p>
+        <div class="notes-list">
+          <div class="notes-item"><span></span><span><strong>Today at a glance</strong> — scans, displays scheduled, notifications queued.</span></div>
+          <div class="notes-item"><span></span><span><strong>Edit the schedule</strong> — tap a display to move or cancel it (weather, keeper off sick).</span></div>
+          <div class="notes-item"><span></span><span><strong>Push a note</strong> — "Balder is out today, come and see him at 14:00." Live to every visitor on site.</span></div>
+        </div>
+        <div class="notes-tip">
+          <strong>The porfell test.</strong> If it takes Emma more than 5 mins a day to run this, the model breaks. Everything else in admin flows from that constraint.
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============ PHONE ============ -->
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="phone-status">
+          <span>9:41</span>
+          <div class="phone-status-right">
+            <svg width="14" height="10" viewBox="0 0 18 12" fill="currentColor"><path d="M2 8h2v3H2zm4-2h2v5H6zm4-2h2v7h-2zm4-2h2v9h-2z"/></svg>
+            <svg width="12" height="10" viewBox="0 0 16 12" fill="currentColor"><path d="M8 3.5a5 5 0 0 0-3.5 1.5l-.7-.7A6 6 0 0 1 8 2.5a6 6 0 0 1 4.2 1.8l-.7.7A5 5 0 0 0 8 3.5Zm0 3a2 2 0 0 0-1.4.6l-.7-.7A3 3 0 0 1 8 5.5a3 3 0 0 1 2.1.9l-.7.7A2 2 0 0 0 8 6.5ZM8 9a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/></svg>
+            <svg width="20" height="10" viewBox="0 0 26 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="1" width="22" height="10" rx="2"/><rect x="2" y="2.5" width="17" height="7" rx="1" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx="0.5" fill="currentColor"/></svg>
+          </div>
+        </div>
+
+        <div class="phone-body">
+
+          <!-- ============ DIRECTORY VIEW ============ -->
+          <div class="view active" data-view="directory">
+            <div class="dir-header">
+              <div class="dir-header-title">Wildlife nearby</div>
+              <div class="dir-header-sub">Manchester · 24 sites within 45 mins</div>
+            </div>
+
+            <div class="dir-search">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+              Search by species, place, or centre
+            </div>
+
+            <div class="dir-toggle">
+              <button class="active" data-dir-toggle="map">Map</button>
+              <button data-dir-toggle="list">List</button>
+            </div>
+
+            <div class="dir-map-wrap">
+              <div class="dir-map">
+                <!-- Stylised UK outline -->
+                <svg viewBox="0 0 200 260" preserveAspectRatio="xMidYMid meet">
+                  <path d="M110 20 L120 25 L118 35 L128 42 L130 55 L125 65 L135 72 L138 85 L132 92 L140 100 L145 115 L138 128 L142 140 L135 155 L138 170 L128 180 L130 195 L120 205 L108 210 L95 215 L82 210 L75 200 L72 185 L65 175 L62 160 L55 148 L58 135 L52 122 L58 108 L55 95 L62 82 L58 68 L68 58 L72 45 L82 40 L92 32 L100 25 Z"
+                    fill="#78A08C" fill-opacity="0.35" stroke="#1F4740" stroke-width="0.8" stroke-opacity="0.4"/>
+                  <!-- Ireland -->
+                  <path d="M30 130 L38 125 L45 135 L48 148 L42 158 L35 160 L28 155 L25 145 Z"
+                    fill="#78A08C" fill-opacity="0.35" stroke="#1F4740" stroke-width="0.8" stroke-opacity="0.4"/>
+                </svg>
+                <!-- Pins positioned on map -->
+                <div class="dir-pin" style="top: 22%; left: 55%;" title="Five Sisters Zoo"></div>
+                <div class="dir-pin" style="top: 30%; left: 60%;" title="Blair Drummond"></div>
+                <div class="dir-pin" style="top: 42%; left: 58%;" title="Lakeland Wildlife Oasis"></div>
+                <div class="dir-pin highlight" style="top: 51%; left: 62%;" data-jump="visitor">
+                  <div class="dir-pin-label">Gauntlet BoP · Knutsford</div>
+                </div>
+                <div class="dir-pin" style="top: 55%; left: 46%;" title="Welsh Mountain Zoo"></div>
+                <div class="dir-pin" style="top: 62%; left: 68%;" title="Sheffield Butterfly House"></div>
+                <div class="dir-pin" style="top: 68%; left: 58%;" title="Exotic Zoo Telford"></div>
+                <div class="dir-pin" style="top: 74%; left: 72%;" title="Studley Grange"></div>
+                <div class="dir-pin" style="top: 82%; left: 65%;" title="Exmoor Zoo"></div>
+                <div class="dir-pin" style="top: 45%; left: 24%;" title="Wild Ireland"></div>
+                <div class="dir-pin" style="top: 55%; left: 22%;" title="Nat Reptile Zoo"></div>
+              </div>
+            </div>
+
+            <div class="dir-list">
+              <div class="dir-card featured" data-jump="visitor">
+                <div class="dir-card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 L16 8 L18 6 L17 11 L21 14 L15 15 L13 21 L11 15 L5 14 L9 11 L8 6 L10 8 Z"/></svg>
+                </div>
+                <div>
+                  <div class="dir-card-name">Gauntlet Birds of Prey</div>
+                  <div class="dir-card-loc">Knutsford · 12 mins away</div>
+                </div>
+                <div class="dir-card-meta">Open now</div>
+              </div>
+
+              <div class="dir-card">
+                <div class="dir-card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="10" r="4"/><path d="M8 20c1-3 3-4 4-4s3 1 4 4"/></svg>
+                </div>
+                <div>
+                  <div class="dir-card-name">Chester Zoo</div>
+                  <div class="dir-card-loc">Upton · 28 mins away</div>
+                </div>
+                <div class="dir-card-meta">Open</div>
+              </div>
+
+              <div class="dir-card">
+                <div class="dir-card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4c-3 0-6 2-6 6 0 5 6 10 6 10s6-5 6-10c0-4-3-6-6-6z"/><circle cx="12" cy="10" r="2"/></svg>
+                </div>
+                <div>
+                  <div class="dir-card-name">Lakeland Wildlife Oasis</div>
+                  <div class="dir-card-loc">Milnthorpe · 1h 40m</div>
+                </div>
+                <div class="dir-card-meta">Open</div>
+              </div>
+
+              <div class="dir-card">
+                <div class="dir-card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12s3-6 8-6 8 6 8 6-3 6-8 6-8-6-8-6z"/><circle cx="12" cy="12" r="2.5"/></svg>
+                </div>
+                <div>
+                  <div class="dir-card-name">Exotic Zoo Telford</div>
+                  <div class="dir-card-loc">Telford · 1h 20m</div>
+                </div>
+                <div class="dir-card-meta">Open</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ VISITOR VIEW ============ -->
+          <div class="view" data-view="visitor">
+            <!-- Home -->
+            <div class="g-home" id="g-home">
+              <div class="g-hero">
+                <svg class="g-hero-illus" viewBox="0 0 200 200" fill="none" stroke="#B8CBBE" stroke-width="1.5">
+                  <!-- Stylised eagle-owl silhouette -->
+                  <ellipse cx="100" cy="110" rx="55" ry="65"/>
+                  <circle cx="82" cy="90" r="12"/>
+                  <circle cx="118" cy="90" r="12"/>
+                  <circle cx="82" cy="90" r="4" fill="#B8CBBE"/>
+                  <circle cx="118" cy="90" r="4" fill="#B8CBBE"/>
+                  <path d="M95 105 L100 115 L105 105 Z" fill="#B8CBBE"/>
+                  <path d="M60 60 Q75 55 85 68"/>
+                  <path d="M140 60 Q125 55 115 68"/>
+                </svg>
+                <div class="g-hero-eyebrow">
+                  <span class="g-hero-dot"></span> Open · closes 17:00
+                </div>
+                <div class="g-hero-title">Gauntlet <em>Birds of Prey</em></div>
+                <div class="g-hero-sub">Cheshire · 180+ birds · Est. 1988</div>
+              </div>
+
+              <div class="g-live-strip" data-jump-sub="schedule">
+                <span class="now">NOW</span>
+                <div>
+                  <strong>Flying display</strong> · Barn Owl · 14:00 in the arena
+                </div>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+              </div>
+
+              <div class="g-features">
+                <button class="g-feature" data-jump-sub="sitemap">
+                  <div class="g-feature-icon">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5 3 7v13l6-2 6 2 6-2V5l-6 2Z"/><path d="M9 5v13M15 7v13"/></svg>
+                  </div>
+                  <div class="g-feature-title">Site map</div>
+                  <div class="g-feature-sub">Where to find everything</div>
+                </button>
+
+                <button class="g-feature" data-jump-sub="schedule">
+                  <div class="g-feature-icon">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                  </div>
+                  <div class="g-feature-title">Live schedule</div>
+                  <div class="g-feature-sub">Flying displays today</div>
+                </button>
+
+                <button class="g-feature" data-jump-sub="species">
+                  <div class="g-feature-icon">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 L16 8 L18 6 L17 11 L21 14 L15 15 L13 21 L11 15 L5 14 L9 11 L8 6 L10 8 Z"/></svg>
+                  </div>
+                  <div class="g-feature-title">Species profiles</div>
+                  <div class="g-feature-sub">Scan an aviary QR</div>
+                </button>
+
+                <button class="g-feature" data-jump-sub="conservation">
+                  <div class="g-feature-icon">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4-7-11a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 7-7 11-7 11Z"/></svg>
+                  </div>
+                  <div class="g-feature-title">Conservation</div>
+                  <div class="g-feature-sub">Where donations go</div>
+                </button>
+              </div>
+
+              <div class="g-footer">
+                <span>Powered by Wildlife App</span>
+                <span>Contact keeper</span>
+              </div>
+            </div>
+
+            <!-- Site map sub-screen -->
+            <div class="g-sub" data-sub="sitemap">
+              <div class="g-sub-header">
+                <button class="g-back" data-back>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div>
+                  <div class="g-sub-title">Site map</div>
+                  <div class="dir-header-sub" style="margin-top:0">Tap a numbered station</div>
+                </div>
+              </div>
+              <div class="g-sub-body">
+                <div class="sitemap-frame">
+                  <svg viewBox="0 0 300 360" preserveAspectRatio="xMidYMid meet">
+                    <!-- Site outline -->
+                    <path d="M30 40 L270 40 L280 80 L275 200 L260 300 L200 330 L100 325 L40 300 L25 220 L20 120 Z"
+                      fill="#F5F1E4" stroke="#1F4740" stroke-width="1.2" stroke-opacity="0.5" stroke-dasharray="4 3"/>
+                    <!-- Path -->
+                    <path d="M60 80 Q120 100, 150 180 T240 260" fill="none" stroke="#1F4740" stroke-width="1.5" stroke-opacity="0.35" stroke-dasharray="3 4"/>
+                    <path d="M150 180 L100 240" fill="none" stroke="#1F4740" stroke-width="1.5" stroke-opacity="0.35" stroke-dasharray="3 4"/>
+                    <!-- Trees decoration -->
+                    <g fill="#78A08C" fill-opacity="0.35">
+                      <circle cx="50" cy="150" r="10"/>
+                      <circle cx="230" cy="90" r="8"/>
+                      <circle cx="250" cy="180" r="9"/>
+                      <circle cx="70" cy="270" r="7"/>
+                      <circle cx="200" cy="290" r="8"/>
+                    </g>
+                    <text x="150" y="35" text-anchor="middle" font-size="8" fill="#4A5B58" font-family="Georgia">GAUNTLET BIRDS OF PREY</text>
+                  </svg>
+                  <div class="sm-station" style="top: 22%; left: 22%;">1</div>
+                  <div class="sm-station" style="top: 32%; left: 52%;">2</div>
+                  <div class="sm-station active" style="top: 50%; left: 50%;">3</div>
+                  <div class="sm-station" style="top: 68%; left: 32%;">4</div>
+                  <div class="sm-station" style="top: 74%; left: 76%;">5</div>
+                </div>
+
+                <div class="sm-legend">
+                  <div class="sm-legend-item">
+                    <div class="sm-legend-badge">1</div>
+                    <div>Entrance &amp; ticket office <small>Café next door</small></div>
+                    <small>5 min</small>
+                  </div>
+                  <div class="sm-legend-item">
+                    <div class="sm-legend-badge">2</div>
+                    <div>Owl aviaries <small>Barn owls, Snowy, Eagle-Owl</small></div>
+                    <small>10 min</small>
+                  </div>
+                  <div class="sm-legend-item">
+                    <div class="sm-legend-badge" style="background: var(--amber);">3</div>
+                    <div>Flying arena <small>You are here · display in 6 mins</small></div>
+                    <small>NOW</small>
+                  </div>
+                  <div class="sm-legend-item">
+                    <div class="sm-legend-badge">4</div>
+                    <div>Falcon &amp; hawk row <small>Peregrine, Harris's, Kestrel</small></div>
+                    <small>8 min</small>
+                  </div>
+                  <div class="sm-legend-item">
+                    <div class="sm-legend-badge">5</div>
+                    <div>Eagle enclosure <small>Bald Eagle, Golden Eagle, Vulture</small></div>
+                    <small>12 min</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Schedule sub-screen -->
+            <div class="g-sub" data-sub="schedule">
+              <div class="g-sub-header">
+                <button class="g-back" data-back>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div>
+                  <div class="g-sub-title">Live schedule</div>
+                  <div class="dir-header-sub" style="margin-top:0">Today · Saturday 18 July</div>
+                </div>
+              </div>
+              <div class="g-sub-body">
+                <div class="schedule">
+                  <div class="sched-date">Morning</div>
+                  <div class="sched-item past">
+                    <div class="sched-time">11:00</div>
+                    <div>
+                      <div class="sched-name">Owl encounter</div>
+                      <div class="sched-loc">Owl aviary · with Grace</div>
+                    </div>
+                    <div style="font-size:10.5px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Done</div>
+                  </div>
+                  <div class="sched-item past">
+                    <div class="sched-time">12:30</div>
+                    <div>
+                      <div class="sched-name">Falconry talk</div>
+                      <div class="sched-loc">Flying arena · with Ben</div>
+                    </div>
+                    <div style="font-size:10.5px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Done</div>
+                  </div>
+
+                  <div class="sched-date" style="margin-top:12px;">Afternoon</div>
+                  <div class="sched-item now">
+                    <div class="sched-time">14:00</div>
+                    <div>
+                      <div class="sched-name">Flying display · Barn owl</div>
+                      <div class="sched-loc">Flying arena · with Ben</div>
+                    </div>
+                    <div>
+                      <div class="sched-badge">NOW</div>
+                      <div class="sched-mins">Starts in 6m</div>
+                    </div>
+                  </div>
+                  <div class="sched-item">
+                    <div class="sched-time">15:00</div>
+                    <div>
+                      <div class="sched-name">Eagle experience</div>
+                      <div class="sched-loc">Flying arena · with Grace</div>
+                    </div>
+                    <div style="font-size:10.5px; color: var(--forest); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Set alert</div>
+                  </div>
+                  <div class="sched-item">
+                    <div class="sched-time">16:00</div>
+                    <div>
+                      <div class="sched-name">Vulture feed</div>
+                      <div class="sched-loc">Eagle enclosure</div>
+                    </div>
+                    <div style="font-size:10.5px; color: var(--forest); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Set alert</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Species sub-screen -->
+            <div class="g-sub" data-sub="species">
+              <div class="g-sub-header">
+                <button class="g-back" data-back>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div>
+                  <div class="g-sub-title">Species</div>
+                  <div class="dir-header-sub" style="margin-top:0">32 in the collection</div>
+                </div>
+              </div>
+              <div class="g-sub-body">
+                <div class="species-grid">
+                  <button class="species-card" data-jump-species="eagle-owl">
+                    <div class="species-thumb">
+                      <svg viewBox="0 0 100 100" fill="currentColor">
+                        <ellipse cx="50" cy="60" rx="28" ry="34"/>
+                        <circle cx="40" cy="45" r="8" fill="#142E29"/>
+                        <circle cx="60" cy="45" r="8" fill="#142E29"/>
+                        <circle cx="40" cy="45" r="4" fill="#D97706"/>
+                        <circle cx="60" cy="45" r="4" fill="#D97706"/>
+                        <path d="M47 55 L50 62 L53 55" stroke="#142E29" stroke-width="1.5" fill="none"/>
+                        <path d="M28 35 Q35 30 42 38" fill="currentColor"/>
+                        <path d="M72 35 Q65 30 58 38" fill="currentColor"/>
+                      </svg>
+                    </div>
+                    <div class="species-meta">
+                      <div class="species-name">Eurasian Eagle-Owl</div>
+                      <div class="species-latin">Bubo bubo</div>
+                    </div>
+                  </button>
+
+                  <button class="species-card">
+                    <div class="species-thumb">
+                      <svg viewBox="0 0 100 100" fill="currentColor">
+                        <path d="M20 50 Q50 20 80 50 L75 65 Q50 55 25 65 Z"/>
+                        <circle cx="72" cy="42" r="4" fill="#142E29"/>
+                        <path d="M78 42 L85 40" stroke="#D97706" stroke-width="2"/>
+                        <path d="M35 60 L30 78 M50 62 L48 82 M65 60 L68 78" stroke="currentColor" stroke-width="1.5"/>
+                      </svg>
+                    </div>
+                    <div class="species-meta">
+                      <div class="species-name">Peregrine Falcon</div>
+                      <div class="species-latin">Falco peregrinus</div>
+                    </div>
+                  </button>
+
+                  <button class="species-card">
+                    <div class="species-thumb">
+                      <svg viewBox="0 0 100 100" fill="currentColor">
+                        <ellipse cx="50" cy="58" rx="26" ry="30"/>
+                        <path d="M35 48 Q50 30 65 48 L55 55 Q50 50 45 55 Z" fill="#F5F1E4"/>
+                        <circle cx="42" cy="48" r="3" fill="#142E29"/>
+                        <circle cx="58" cy="48" r="3" fill="#142E29"/>
+                        <path d="M47 55 L50 60 L53 55" stroke="#D97706" stroke-width="1.5" fill="none"/>
+                      </svg>
+                    </div>
+                    <div class="species-meta">
+                      <div class="species-name">Bald Eagle</div>
+                      <div class="species-latin">Haliaeetus leucocephalus</div>
+                    </div>
+                  </button>
+
+                  <button class="species-card">
+                    <div class="species-thumb">
+                      <svg viewBox="0 0 100 100" fill="currentColor">
+                        <path d="M25 55 Q50 25 75 55 Q70 75 50 78 Q30 75 25 55 Z"/>
+                        <circle cx="42" cy="48" r="3" fill="#142E29"/>
+                        <circle cx="58" cy="48" r="3" fill="#142E29"/>
+                        <path d="M47 55 L50 60 L53 55" stroke="#142E29" stroke-width="1.2" fill="none"/>
+                      </svg>
+                    </div>
+                    <div class="species-meta">
+                      <div class="species-name">Barn Owl</div>
+                      <div class="species-latin">Tyto alba</div>
+                    </div>
+                  </button>
+
+                  <button class="species-card">
+                    <div class="species-thumb">
+                      <svg viewBox="0 0 100 100" fill="currentColor">
+                        <ellipse cx="50" cy="60" rx="24" ry="28"/>
+                        <circle cx="42" cy="48" r="3" fill="#142E29"/>
+                        <circle cx="58" cy="48" r="3" fill="#142E29"/>
+                        <path d="M45 55 L50 62 L55 55" stroke="#D97706" stroke-width="1.5" fill="none"/>
+                        <path d="M30 40 Q40 32 45 42" fill="currentColor"/>
+                      </svg>
+                    </div>
+                    <div class="species-meta">
+                      <div class="species-name">Harris's Hawk</div>
+                      <div class="species-latin">Parabuteo unicinctus</div>
+                    </div>
+                  </button>
+
+                  <button class="species-card">
+                    <div class="species-thumb">
+                      <svg viewBox="0 0 100 100" fill="currentColor">
+                        <path d="M20 50 Q50 15 80 50 Q75 78 50 82 Q25 78 20 50 Z"/>
+                        <circle cx="42" cy="45" r="3" fill="#142E29"/>
+                        <circle cx="58" cy="45" r="3" fill="#142E29"/>
+                        <path d="M47 52 L50 58 L53 52" stroke="#D97706" stroke-width="1.5" fill="none"/>
+                      </svg>
+                    </div>
+                    <div class="species-meta">
+                      <div class="species-name">Golden Eagle</div>
+                      <div class="species-latin">Aquila chrysaetos</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Species detail (Eagle Owl) -->
+            <div class="species-detail" data-sub="species-detail">
+              <div class="sd-hero">
+                <button class="sd-back" data-back-species>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <svg class="owl" viewBox="0 0 200 200" fill="none">
+                  <ellipse cx="100" cy="115" rx="55" ry="70" fill="#0F1E1F" fill-opacity="0.35"/>
+                  <circle cx="80" cy="90" r="20" fill="#0F1E1F" fill-opacity="0.4"/>
+                  <circle cx="120" cy="90" r="20" fill="#0F1E1F" fill-opacity="0.4"/>
+                  <circle cx="80" cy="90" r="9" fill="#D97706"/>
+                  <circle cx="120" cy="90" r="9" fill="#D97706"/>
+                  <circle cx="80" cy="90" r="4" fill="#0F1E1F"/>
+                  <circle cx="120" cy="90" r="4" fill="#0F1E1F"/>
+                  <path d="M92 110 L100 122 L108 110 Z" fill="#EDE9DF"/>
+                  <path d="M55 55 Q70 50 82 65" stroke="#0F1E1F" stroke-opacity="0.4" stroke-width="4" fill="none"/>
+                  <path d="M145 55 Q130 50 118 65" stroke="#0F1E1F" stroke-opacity="0.4" stroke-width="4" fill="none"/>
+                </svg>
+                <div class="sd-title">
+                  <div class="sd-title-eyebrow">Owls · resident since 2019</div>
+                  <h3>Balder</h3>
+                  <small>Eurasian Eagle-Owl · Bubo bubo</small>
+                </div>
+              </div>
+
+              <div class="sd-body">
+                <div class="sd-stats">
+                  <div class="sd-stat">
+                    <div class="sd-stat-label">Wingspan</div>
+                    <div class="sd-stat-value">1.8 m</div>
+                  </div>
+                  <div class="sd-stat">
+                    <div class="sd-stat-label">Weight</div>
+                    <div class="sd-stat-value">3 kg</div>
+                  </div>
+                  <div class="sd-stat">
+                    <div class="sd-stat-label">Lifespan</div>
+                    <div class="sd-stat-value">20 yr</div>
+                  </div>
+                </div>
+
+                <div class="sd-section-label">About Balder</div>
+                <p>Balder came to Gauntlet from a private collection in 2019 when his previous owner could no longer care for him. He's Grace's favourite to work with — bold, curious, and often stars in our flying displays. Listen out for his call at dusk; you can hear it from over a mile away.</p>
+
+                <div class="sd-section-label">In the wild</div>
+                <p>The largest owl species in the world. Found across Europe and Asia, from coastal cliffs to boreal forest. A pair defends a territory of up to 15 km². Prey ranges from voles to young roe deer.</p>
+
+                <div class="sd-audio">
+                  <div class="sd-audio-icon">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <div class="sd-audio-text">
+                    <div class="sd-audio-title">Hear Balder's call</div>
+                    <div class="sd-audio-sub">Recorded on site · 0:18</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Conservation sub-screen -->
+            <div class="g-sub" data-sub="conservation">
+              <div class="g-sub-header">
+                <button class="g-back" data-back>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div>
+                  <div class="g-sub-title">Conservation</div>
+                  <div class="dir-header-sub" style="margin-top:0">Our work &amp; where donations go</div>
+                </div>
+              </div>
+              <div class="g-sub-body">
+                <div class="conservation-hero">
+                  <h4>Every ticket funds a bird that couldn't survive on its own.</h4>
+                  <p>Since 1988, Gauntlet has taken in raptors from private owners, illegal trade, and injury. 40% of the collection are rescues.</p>
+                </div>
+
+                <div class="cons-stats">
+                  <div class="cons-stat">
+                    <div class="cons-stat-value">72</div>
+                    <div class="cons-stat-label">Rescued birds in the last decade</div>
+                  </div>
+                  <div class="cons-stat">
+                    <div class="cons-stat-value">£14k</div>
+                    <div class="cons-stat-label">Donated to raptor recovery in 2025</div>
+                  </div>
+                </div>
+
+                <div class="sd-section-label">Where donations go</div>
+
+                <div class="cons-project">
+                  <div class="cons-project-icon">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 L16 8 L18 6 L17 11 L21 14 L15 15 L13 21 L11 15 L5 14 L9 11 L8 6 L10 8 Z"/></svg>
+                  </div>
+                  <div>
+                    <div class="cons-project-name">Northern goshawk reintroduction</div>
+                    <div class="cons-project-desc">Working with the Hawk &amp; Owl Trust on breeding pairs for release in South Yorkshire moorland.</div>
+                  </div>
+                </div>
+
+                <div class="cons-project">
+                  <div class="cons-project-icon">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10a4 4 0 0 1 8 0v10"/><path d="M12 10a4 4 0 0 1 8 0v10"/></svg>
+                  </div>
+                  <div>
+                    <div class="cons-project-name">Raptor rescue &amp; rehabilitation</div>
+                    <div class="cons-project-desc">Injured wild birds treated on-site by our team and released where possible. 22 released in 2025.</div>
+                  </div>
+                </div>
+
+                <div class="cons-project">
+                  <div class="cons-project-icon">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+                  </div>
+                  <div>
+                    <div class="cons-project-name">School education programme</div>
+                    <div class="cons-project-desc">Free visits to primary schools in Cheshire &amp; Greater Manchester. 3,400 children reached in 2025.</div>
+                  </div>
+                </div>
+
+                <div class="cons-donate">
+                  <div>
+                    <strong>Support our work</strong>
+                    <small>One-off or monthly · from £3</small>
+                  </div>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ ADMIN VIEW ============ -->
+          <div class="view" data-view="admin">
+            <div class="admin-header">
+              <div class="admin-eyebrow">Saturday · 18 July · 13:54</div>
+              <div class="admin-title">Good afternoon, Emma</div>
+              <div class="admin-sub">Gauntlet Birds of Prey · 3 scheduled displays remaining</div>
+            </div>
+
+            <div class="admin-summary">
+              <div class="admin-metric">
+                <div class="admin-metric-label">On site now</div>
+                <div class="admin-metric-value">247 <small>▲ 12%</small></div>
+              </div>
+              <div class="admin-metric">
+                <div class="admin-metric-label">QR scans today</div>
+                <div class="admin-metric-value">1,842 <small>▲ 8%</small></div>
+              </div>
+            </div>
+
+            <div class="admin-section-label">
+              <span>Today's schedule</span>
+              <a href="#" onclick="return false">Edit all</a>
+            </div>
+
+            <div class="admin-sched-list">
+              <div class="admin-sched-item">
+                <div class="admin-sched-time">11:00</div>
+                <div class="admin-sched-name">Owl encounter · Grace</div>
+                <div class="admin-sched-status">Done</div>
+              </div>
+              <div class="admin-sched-item">
+                <div class="admin-sched-time">12:30</div>
+                <div class="admin-sched-name">Falconry talk · Ben</div>
+                <div class="admin-sched-status">Done</div>
+              </div>
+              <div class="admin-sched-item" data-open-modal>
+                <div class="admin-sched-time">14:00</div>
+                <div class="admin-sched-name">Flying display · Ben</div>
+                <div class="admin-sched-status warn">
+                  <span class="admin-status-dot"></span>
+                  Live in 6m
+                </div>
+              </div>
+              <div class="admin-sched-item">
+                <div class="admin-sched-time">15:00</div>
+                <div class="admin-sched-name">Eagle experience · Grace</div>
+                <div class="admin-sched-status">Scheduled</div>
+              </div>
+              <div class="admin-sched-item">
+                <div class="admin-sched-time">16:00</div>
+                <div class="admin-sched-name">Vulture feed</div>
+                <div class="admin-sched-status">Scheduled</div>
+              </div>
+            </div>
+
+            <div class="admin-section-label">
+              <span>Quick actions</span>
+            </div>
+
+            <div class="admin-actions">
+              <button class="admin-action">
+                <div class="admin-action-icon">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg>
+                </div>
+                <div>
+                  <div class="admin-action-name">Push a note</div>
+                  <div class="admin-action-sub">To all 247 visitors on site</div>
+                </div>
+              </button>
+              <button class="admin-action">
+                <div class="admin-action-icon">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 L16 8 L18 6 L17 11 L21 14 L15 15 L13 21 L11 15 L5 14 L9 11 L8 6 L10 8 Z"/></svg>
+                </div>
+                <div>
+                  <div class="admin-action-name">Species library</div>
+                  <div class="admin-action-sub">32 profiles · 4 need photos</div>
+                </div>
+              </button>
+              <button class="admin-action">
+                <div class="admin-action-icon">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg>
+                </div>
+                <div>
+                  <div class="admin-action-name">Site map</div>
+                  <div class="admin-action-sub">Last edit 4 days ago</div>
+                </div>
+              </button>
+              <button class="admin-action">
+                <div class="admin-action-icon">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+                </div>
+                <div>
+                  <div class="admin-action-name">Insights</div>
+                  <div class="admin-action-sub">Weekly summary ready</div>
+                </div>
+              </button>
+            </div>
+
+            <!-- Admin edit-schedule modal -->
+            <div class="admin-modal" id="admin-modal">
+              <div class="admin-modal-card">
+                <div class="admin-modal-title">Edit display · 14:00</div>
+                <div class="admin-modal-sub">Live to visitors in 6 minutes</div>
+
+                <div class="admin-field">
+                  <div class="admin-field-label">Bird</div>
+                  <div class="admin-field-value">
+                    <span>Barn owl · Willow</span>
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                  </div>
+                </div>
+
+                <div class="admin-field">
+                  <div class="admin-field-label">Keeper</div>
+                  <div class="admin-field-value">
+                    <span>Ben</span>
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                  </div>
+                </div>
+
+                <div class="admin-field">
+                  <div class="admin-field-label">Location</div>
+                  <div class="admin-field-value">
+                    <span>Flying arena</span>
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                  </div>
+                </div>
+
+                <div class="admin-modal-actions">
+                  <button class="admin-btn admin-btn-ghost" data-close-modal>Cancel</button>
+                  <button class="admin-btn admin-btn-primary" data-close-modal>Save &amp; push</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Theme toggle
+  const themeBtn = document.getElementById('theme-btn');
+  themeBtn.addEventListener('click', () => {
+    const root = document.documentElement;
+    const current = root.getAttribute('data-theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (!current) {
+      root.setAttribute('data-theme', systemDark ? 'light' : 'dark');
+    } else {
+      root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+  });
+
+  // Top tabs
+  const tabs = document.querySelectorAll('.tab');
+  const views = document.querySelectorAll('.view');
+  const notesBlocks = document.querySelectorAll('[data-notes]');
+
+  function setTab(name) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    views.forEach(v => v.classList.toggle('active', v.dataset.view === name));
+    notesBlocks.forEach(n => n.style.display = n.dataset.notes === name ? '' : 'none');
+    resetVisitor();
+    resetAdmin();
+  }
+  tabs.forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
+
+  // Directory: map<->list toggle
+  document.querySelectorAll('[data-dir-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.dirToggle;
+      document.querySelectorAll('[data-dir-toggle]').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelector('.dir-map-wrap').classList.toggle('hidden', mode !== 'map');
+      document.querySelector('.dir-list').classList.toggle('active', mode === 'list');
+    });
+  });
+
+  // Directory: pin/list card → jump to visitor
+  document.querySelectorAll('[data-jump]').forEach(el => {
+    el.addEventListener('click', () => setTab(el.dataset.jump));
+  });
+
+  // Visitor: feature tile → sub-screen
+  function showGSub(name) {
+    document.getElementById('g-home').classList.add('hidden');
+    document.querySelectorAll('.g-sub').forEach(s => s.classList.toggle('active', s.dataset.sub === name));
+    document.querySelector('.species-detail').classList.remove('active');
+  }
+
+  document.querySelectorAll('[data-jump-sub]').forEach(el => {
+    el.addEventListener('click', () => showGSub(el.dataset.jumpSub));
+  });
+
+  document.querySelectorAll('[data-back]').forEach(btn => {
+    btn.addEventListener('click', resetVisitor);
+  });
+
+  function resetVisitor() {
+    document.getElementById('g-home').classList.remove('hidden');
+    document.querySelectorAll('.g-sub').forEach(s => s.classList.remove('active'));
+    document.querySelector('.species-detail').classList.remove('active');
+    // Scroll phone body back to top
+    document.querySelectorAll('.phone-body').forEach(b => b.scrollTop = 0);
+  }
+
+  // Species card → detail
+  document.querySelectorAll('[data-jump-species]').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.g-sub').forEach(s => s.classList.remove('active'));
+      document.querySelector('.species-detail').classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('[data-back-species]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelector('.species-detail').classList.remove('active');
+      document.querySelector('[data-sub="species"]').classList.add('active');
+    });
+  });
+
+  // Admin: open/close modal
+  const adminModal = document.getElementById('admin-modal');
+  document.querySelectorAll('[data-open-modal]').forEach(el => {
+    el.addEventListener('click', () => adminModal.classList.add('active'));
+  });
+  document.querySelectorAll('[data-close-modal]').forEach(el => {
+    el.addEventListener('click', () => adminModal.classList.remove('active'));
+  });
+
+  function resetAdmin() {
+    adminModal.classList.remove('active');
+  }
+</script>
+</body>
+</html>
