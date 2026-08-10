@@ -1059,6 +1059,143 @@
     color: var(--forest); margin-top: 6px;
     display: flex; justify-content: flex-end;
   }
+
+  /* ==== OFFERS ==== */
+  .offer-badge {
+    position: absolute; top: 8px; right: 8px;
+    background: var(--amber); color: #fff;
+    font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(217, 119, 6, 0.5);
+    white-space: nowrap; z-index: 2;
+  }
+  .offer-badge.featured {
+    font-size: 10.5px; padding: 5px 12px;
+    top: 14px; right: 14px;
+  }
+  .dir-featured-tag {
+    max-width: calc(100% - 130px);
+  }
+
+  .dir-nav {
+    display: flex; padding: 4px;
+    background: var(--bone); border-radius: 999px;
+    margin: 4px 22px 6px; border: 1px solid var(--hairline);
+  }
+  .dir-nav-btn {
+    flex: 1; appearance: none; border: 0; background: transparent;
+    color: var(--ink-2); font-family: var(--sans);
+    font-size: 12.5px; font-weight: 600;
+    padding: 8px; border-radius: 999px; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .dir-nav-btn.active {
+    background: var(--forest); color: var(--paper);
+    box-shadow: 0 2px 6px rgba(31, 71, 64, 0.3);
+  }
+  .dir-nav-count {
+    background: rgba(255, 255, 255, 0.22); padding: 1px 6px;
+    border-radius: 999px; font-size: 10px; font-variant-numeric: tabular-nums;
+  }
+  .dir-nav-btn:not(.active) .dir-nav-count { background: var(--mist); color: var(--ink-3); }
+
+  .offers-view { display: none; padding: 8px 0 24px; }
+  .offers-view.active { display: block; }
+  .dir-home-view.hidden { display: none; }
+
+  .offers-head { padding: 6px 22px 10px; }
+  .offers-head-title {
+    font-family: var(--serif); font-size: 26px;
+    color: var(--ink); letter-spacing: -0.02em;
+    line-height: 1.05; margin: 0; font-weight: 400;
+  }
+  .offers-head-title em { font-style: italic; color: var(--amber); }
+  .offers-head-sub { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+
+  .offers-sort {
+    display: flex; gap: 6px; padding: 4px 22px 14px;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .offers-sort::-webkit-scrollbar { display: none; }
+  .offers-sort-chip {
+    flex: 0 0 auto; appearance: none;
+    border: 1px solid var(--hairline); background: var(--paper);
+    color: var(--ink-2); font-family: var(--sans);
+    font-size: 12px; padding: 5px 10px; border-radius: 999px;
+    cursor: pointer; font-weight: 500;
+  }
+  .offers-sort-chip.active {
+    background: var(--amber); color: #fff; border-color: var(--amber);
+  }
+
+  .offers-list {
+    padding: 0 22px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .offer-card {
+    background: var(--paper); border: 1px solid var(--hairline);
+    border-radius: 14px; padding: 0; overflow: hidden;
+    cursor: pointer; transition: transform 0.12s ease;
+    display: flex; align-items: stretch;
+    box-shadow: var(--shadow-card);
+  }
+  .offer-card:hover { transform: translateY(-1px); }
+  .offer-card-thumb {
+    width: 84px; background-size: cover; background-position: center;
+    flex-shrink: 0; position: relative;
+  }
+  .offer-card-badge {
+    position: absolute; top: 6px; left: 6px;
+    background: var(--amber); color: #fff;
+    font-size: 8.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 6px; border-radius: 4px;
+  }
+  .offer-card-content { padding: 12px 14px; flex: 1; min-width: 0; }
+  .offer-card-centre {
+    font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3); font-weight: 600;
+  }
+  .offer-card-title {
+    font-family: var(--serif); font-size: 15px; color: var(--ink);
+    letter-spacing: -0.005em; margin-top: 3px; line-height: 1.2;
+  }
+  .offer-card-meta {
+    font-size: 11px; color: var(--amber); font-weight: 600;
+    margin-top: 4px; letter-spacing: 0.02em;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .offer-card-arrow {
+    display: flex; align-items: center; padding-right: 12px;
+    color: var(--forest); flex-shrink: 0;
+  }
+
+  /* Feature tile — offers on Gauntlet home */
+  .g-feature-visual.offers {
+    background: linear-gradient(160deg, #D97706 0%, #8C4A05 100%);
+    color: var(--paper);
+  }
+  .g-feature-visual.offers .stat {
+    font-family: var(--serif); font-size: 24px;
+    letter-spacing: -0.02em; line-height: 1;
+    font-weight: 400; font-style: italic;
+  }
+  .g-feature-visual.offers .stat small {
+    display: block; font-family: var(--sans); font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    opacity: 0.9; margin-top: 3px; font-weight: 700; font-style: normal;
+  }
+
+  /* Gauntlet offers sub-screen list — reuses offer-card */
+  .g-offers-body { padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 10px; }
+  .g-offers-hint {
+    font-size: 11.5px; color: var(--ink-3);
+    background: var(--bone); border-radius: 10px;
+    padding: 10px 12px; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .g-offers-hint svg { color: var(--amber); flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -1191,45 +1328,147 @@
                 <div class="dir-head-eyebrow">Manchester · Saturday</div>
                 <h1 class="dir-head-title">Wildlife <em>nearby</em></h1>
               </div>
-              <div class="dir-search">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
-                Search by species, place, or centre
+
+              <div class="dir-nav">
+                <button class="dir-nav-btn active" data-dirnav="home">
+                  Nearby <span class="dir-nav-count">24</span>
+                </button>
+                <button class="dir-nav-btn" data-dirnav="offers">
+                  Offers <span class="dir-nav-count">7</span>
+                </button>
               </div>
-              <div class="dir-chips">
-                <button class="dir-chip active">All</button>
-                <button class="dir-chip">Birds of prey</button>
-                <button class="dir-chip">Zoos</button>
-                <button class="dir-chip">Aquariums</button>
-                <button class="dir-chip">Butterfly</button>
-                <button class="dir-chip">Sanctuaries</button>
-              </div>
-              <div class="dir-featured" data-jump="visitor">
-                <div class="dir-featured-img"></div>
-                <div class="dir-featured-content">
-                  <span class="dir-featured-tag"><span class="dir-featured-dot"></span> Open · 12 min away</span>
-                  <div>
-                    <h3>Gauntlet <em>Birds of Prey</em></h3>
-                    <div class="dir-featured-meta">
-                      <span><strong>180+ birds</strong></span>
-                      <span>·</span>
-                      <span>Est. 1988</span>
-                      <span>·</span>
-                      <span>Knutsford</span>
+
+              <div class="dir-home-view">
+                <div class="dir-search">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+                  Search by species, place, or centre
+                </div>
+                <div class="dir-chips">
+                  <button class="dir-chip active">All</button>
+                  <button class="dir-chip">Birds of prey</button>
+                  <button class="dir-chip">Zoos</button>
+                  <button class="dir-chip">Aquariums</button>
+                  <button class="dir-chip">Butterfly</button>
+                  <button class="dir-chip">Sanctuaries</button>
+                </div>
+                <div class="dir-featured" data-jump="visitor">
+                  <div class="dir-featured-img"></div>
+                  <span class="offer-badge featured">2 for 1 · Father's Day</span>
+                  <div class="dir-featured-content">
+                    <span class="dir-featured-tag"><span class="dir-featured-dot"></span> Open · 12 min away</span>
+                    <div>
+                      <h3>Gauntlet <em>Birds of Prey</em></h3>
+                      <div class="dir-featured-meta">
+                        <span><strong>180+ birds</strong></span>
+                        <span>·</span>
+                        <span>Est. 1988</span>
+                        <span>·</span>
+                        <span>Knutsford</span>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div class="dir-section-label">
+                  <span>Also nearby</span>
+                  <small>Sorted by distance</small>
+                </div>
+                <div class="dir-grid">
+                  <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/eagle.jpg');"><span class="dir-card-badge">28 min</span><span class="offer-badge">Kids Free</span></div><div class="dir-card-meta"><div class="dir-card-name">Chester Zoo</div><div class="dir-card-loc">Upton · Zoo</div></div></button>
+                  <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/barn_owl.jpg');"><span class="dir-card-badge">1h 40m</span><span class="offer-badge">Summer £45</span></div><div class="dir-card-meta"><div class="dir-card-name">Lakeland Wildlife Oasis</div><div class="dir-card-loc">Milnthorpe · Small zoo</div></div></button>
+                  <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/peregrine.jpg');"><span class="dir-card-badge">1h 20m</span><span class="offer-badge">-20%</span></div><div class="dir-card-meta"><div class="dir-card-name">Exotic Zoo Telford</div><div class="dir-card-loc">Shropshire · Small zoo</div></div></button>
+                  <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/harris_hawk.jpg');"><span class="dir-card-badge">2h 5m</span></div><div class="dir-card-meta"><div class="dir-card-name">Welsh Mountain Zoo</div><div class="dir-card-loc">Colwyn Bay · Zoo</div></div></button>
+                  <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/forest.jpg');"><span class="dir-card-badge">2h 40m</span><span class="offer-badge">Twilight £8</span></div><div class="dir-card-meta"><div class="dir-card-name">Exmoor Zoo</div><div class="dir-card-loc">Bratton Fleming · Zoo</div></div></button>
+                  <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/golden_eagle.jpg');"><span class="dir-card-badge">3h</span></div><div class="dir-card-meta"><div class="dir-card-name">World of Owls</div><div class="dir-card-loc">Randalstown · BoP</div></div></button>
+                </div>
               </div>
-              <div class="dir-section-label">
-                <span>Also nearby</span>
-                <small>Sorted by distance</small>
-              </div>
-              <div class="dir-grid">
-                <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/eagle.jpg');"><span class="dir-card-badge">28 min</span></div><div class="dir-card-meta"><div class="dir-card-name">Chester Zoo</div><div class="dir-card-loc">Upton · Zoo</div></div></button>
-                <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/barn_owl.jpg');"><span class="dir-card-badge">1h 40m</span></div><div class="dir-card-meta"><div class="dir-card-name">Lakeland Wildlife Oasis</div><div class="dir-card-loc">Milnthorpe · Small zoo</div></div></button>
-                <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/peregrine.jpg');"><span class="dir-card-badge">1h 20m</span></div><div class="dir-card-meta"><div class="dir-card-name">Exotic Zoo Telford</div><div class="dir-card-loc">Shropshire · Small zoo</div></div></button>
-                <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/harris_hawk.jpg');"><span class="dir-card-badge">2h 5m</span></div><div class="dir-card-meta"><div class="dir-card-name">Welsh Mountain Zoo</div><div class="dir-card-loc">Colwyn Bay · Zoo</div></div></button>
-                <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/forest.jpg');"><span class="dir-card-badge">2h 40m</span></div><div class="dir-card-meta"><div class="dir-card-name">Exmoor Zoo</div><div class="dir-card-loc">Bratton Fleming · Zoo</div></div></button>
-                <button class="dir-card"><div class="dir-card-img" style="background-image: url('img/golden_eagle.jpg');"><span class="dir-card-badge">3h</span></div><div class="dir-card-meta"><div class="dir-card-name">World of Owls</div><div class="dir-card-loc">Randalstown · BoP</div></div></button>
+
+              <div class="offers-view">
+                <div class="offers-head">
+                  <h1 class="offers-head-title">Live <em>offers</em> nearby</h1>
+                  <div class="offers-head-sub">7 active · updated 4 mins ago</div>
+                </div>
+                <div class="offers-sort">
+                  <button class="offers-sort-chip active">Ends today</button>
+                  <button class="offers-sort-chip">This weekend</button>
+                  <button class="offers-sort-chip">This month</button>
+                  <button class="offers-sort-chip">By distance</button>
+                </div>
+                <div class="offers-list">
+                  <div class="offer-card" data-jump="visitor">
+                    <div class="offer-card-thumb" style="background-image: url('img/owl_hero.jpg');">
+                      <span class="offer-card-badge">Ends today</span>
+                    </div>
+                    <div class="offer-card-content">
+                      <div class="offer-card-centre">Gauntlet Birds of Prey · 12 min</div>
+                      <div class="offer-card-title">2 for 1 · Father's Day</div>
+                      <div class="offer-card-meta">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        Ends Sunday 6pm
+                      </div>
+                    </div>
+                    <div class="offer-card-arrow"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                  </div>
+
+                  <div class="offer-card">
+                    <div class="offer-card-thumb" style="background-image: url('img/eagle.jpg');">
+                      <span class="offer-card-badge">Half term</span>
+                    </div>
+                    <div class="offer-card-content">
+                      <div class="offer-card-centre">Chester Zoo · 28 min</div>
+                      <div class="offer-card-title">Kids go free · one per adult</div>
+                      <div class="offer-card-meta">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        Ends 2 June
+                      </div>
+                    </div>
+                    <div class="offer-card-arrow"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                  </div>
+
+                  <div class="offer-card">
+                    <div class="offer-card-thumb" style="background-image: url('img/forest.jpg');">
+                      <span class="offer-card-badge">Daily</span>
+                    </div>
+                    <div class="offer-card-content">
+                      <div class="offer-card-centre">Exmoor Zoo · 2h 40m</div>
+                      <div class="offer-card-title">Twilight ticket · £8 after 3pm</div>
+                      <div class="offer-card-meta">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        Ongoing
+                      </div>
+                    </div>
+                    <div class="offer-card-arrow"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                  </div>
+
+                  <div class="offer-card">
+                    <div class="offer-card-thumb" style="background-image: url('img/barn_owl.jpg');">
+                      <span class="offer-card-badge">Season</span>
+                    </div>
+                    <div class="offer-card-content">
+                      <div class="offer-card-centre">Lakeland Wildlife Oasis · 1h 40m</div>
+                      <div class="offer-card-title">Summer season pass · £45</div>
+                      <div class="offer-card-meta">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        Until 30 Sept
+                      </div>
+                    </div>
+                    <div class="offer-card-arrow"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                  </div>
+
+                  <div class="offer-card">
+                    <div class="offer-card-thumb" style="background-image: url('img/peregrine.jpg');">
+                      <span class="offer-card-badge">Aug only</span>
+                    </div>
+                    <div class="offer-card-content">
+                      <div class="offer-card-centre">Exotic Zoo Telford · 1h 20m</div>
+                      <div class="offer-card-title">20% off all tickets · late summer</div>
+                      <div class="offer-card-meta">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        Ends 30 August
+                      </div>
+                    </div>
+                    <div class="offer-card-arrow"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1318,6 +1557,16 @@
                   <div class="g-feature-content">
                     <div class="g-feature-title">Conservation</div>
                     <div class="g-feature-sub">Where donations go</div>
+                  </div>
+                </button>
+
+                <button class="g-feature" data-jump-sub="offers">
+                  <div class="g-feature-visual offers">
+                    <div class="stat">2<small>OFFERS LIVE</small></div>
+                  </div>
+                  <div class="g-feature-content">
+                    <div class="g-feature-title">Offers &amp; events</div>
+                    <div class="g-feature-sub">Father's Day 2-for-1 · ends Sun</div>
                   </div>
                 </button>
               </div>
@@ -1810,6 +2059,52 @@
                 </div>
               </div>
             </div>
+
+            <!-- GAUNTLET OFFERS -->
+            <div class="g-sub" data-sub="offers">
+              <div class="g-sub-header">
+                <button class="g-back" data-back><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+                <div><div class="g-sub-title">Offers &amp; events</div><div class="g-sub-sub">2 live · redeem in-app or at the gate</div></div>
+              </div>
+              <div class="g-sub-body">
+                <div class="g-offers-body">
+                  <div class="g-offers-hint">
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                    Tap an offer to redeem — or show at the gate.
+                  </div>
+
+                  <div class="offer-card">
+                    <div class="offer-card-thumb" style="background-image: url('img/owl_hero.jpg');">
+                      <span class="offer-card-badge">Ends today</span>
+                    </div>
+                    <div class="offer-card-content">
+                      <div class="offer-card-centre">Weekend special</div>
+                      <div class="offer-card-title">2 for 1 · Father's Day</div>
+                      <div class="offer-card-meta">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        Ends Sunday 6pm · book online with code DAD
+                      </div>
+                    </div>
+                    <div class="offer-card-arrow"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                  </div>
+
+                  <div class="offer-card">
+                    <div class="offer-card-thumb" style="background-image: url('img/eagle.jpg');">
+                      <span class="offer-card-badge">Aug 4</span>
+                    </div>
+                    <div class="offer-card-content">
+                      <div class="offer-card-centre">Members preview event</div>
+                      <div class="offer-card-title">Meet Balder at dusk</div>
+                      <div class="offer-card-meta">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        Sunday 4 Aug · 7:30pm · book to reserve
+                      </div>
+                    </div>
+                    <div class="offer-card-arrow"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- ADMIN -->
@@ -1884,6 +2179,10 @@
                 <button class="admin-action">
                   <div class="admin-action-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg></div>
                   <div><div class="admin-action-name">Push a note</div><div class="admin-action-sub">To all 247 on site</div></div>
+                </button>
+                <button class="admin-action" style="border-color: var(--amber); background: linear-gradient(135deg, rgba(217,119,6,0.06), transparent);">
+                  <div class="admin-action-icon" style="background: var(--amber);"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+                  <div><div class="admin-action-name">Manage offers <span style="background: var(--amber); color: #fff; font-size: 9px; padding: 1px 5px; border-radius: 3px; margin-left: 4px; letter-spacing: 0.08em; font-weight: 700; vertical-align: middle;">2 LIVE</span></div><div class="admin-action-sub">Father's Day ends Sun · 12 redemptions</div></div>
                 </button>
                 <button class="admin-action">
                   <div class="admin-action-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 L16 8 L18 6 L17 11 L21 14 L15 15 L13 21 L11 15 L5 14 L9 11 L8 6 L10 8 Z"/></svg></div>
@@ -1964,6 +2263,16 @@
   }
   tabs.forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
   document.querySelectorAll('[data-jump]').forEach(el => el.addEventListener('click', () => setTab(el.dataset.jump)));
+
+  // Directory bottom nav: Nearby / Offers
+  document.querySelectorAll('[data-dirnav]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.dirnav;
+      document.querySelectorAll('[data-dirnav]').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelector('.dir-home-view').classList.toggle('hidden', mode !== 'home');
+      document.querySelector('.offers-view').classList.toggle('active', mode === 'offers');
+    });
+  });
 
   function showGSub(name) {
     document.getElementById('g-home').classList.add('hidden');
